@@ -36,7 +36,7 @@ let login = (req, res, next)=>{
         if(user.password == password){
             let userData = user.name;
             res.cookie('User', userData)
-            res.json({message: 'Logged in successfully'})
+            res.json({message: 'Logged in successfully', user: userData})
         }else{
             res.json({message: 'Please check login credentials'})
         }
@@ -49,8 +49,7 @@ let createPost = (req, res, next)=>{
         return res.json({message: 'Please fill all fields'})
     }
 
-    // let user = req.cookies.User
-    let user = "Sreerag"
+    let user = req.body.owner;
     let post = new Post({
         title: req.body.title,
         body: req.body.body,

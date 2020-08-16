@@ -23,10 +23,10 @@ class Home extends React.Component {
 
     render(){
         return(
-            <div className="card">
+            <div >
             {
                 this.state.posts.map((post)=>(
-                    <div>
+                    <div className="cards">
                         <h2>{post.title}</h2>
                         <p>{post.body}</p>
                         <p>Created by: {post.owner}</p><p>Date: {post.createdAt}</p>

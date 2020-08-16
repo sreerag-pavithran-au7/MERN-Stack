@@ -1,8 +1,8 @@
-.navbar{
+.navbars{
     background-color: dodgerblue;
     height: 30px;
     padding: 30px;
-    
+    padding-bottom: 59px;
 }
 
 .link {
@@ -13,21 +13,21 @@
     background-color: #333;
 }
 
-.card {
+.cards {
     width: 60%;
     border: 1px solid #30bfbf;
     padding:50px;
     margin: 12px auto
 }
 
-.nolink{
+.nolinks{
     text-decoration: none;
     color: #fff;
     padding: 38px;
-    height: 30px;;
+    height: 30px;
 }
 
-.nolink:hover{
+.nolinks:hover{
     background-color: #333;
 }
 
