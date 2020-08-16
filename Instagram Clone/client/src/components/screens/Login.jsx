@@ -1,30 +1,24 @@
-import React,{useState,useContext,} from 'react'
-import {useHistory as history} from 'react-router-dom';
-// import {UserContext} from '../../App'
+import React,{useState} from 'react'
+import {useHistory} from 'react-router-dom';
+import axios from 'axios';
 
 import M from 'materialize-css';
 
 const Login = ()=>{
-    // const {state,dispatch} = useContext(UserContext)
+    const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const LoginData = ()=>{
-        fetch('http://localhost:5000/signin', {
-            method: "post",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(email, password)
-        })
-        .then(res=> res.json())
-        .then(data=> {
-            if(data.error){
-                M.toast({html: data.error, classes: "#c62828 red darken-3"})
+        axios.post('/signin', {email, password})
+        .then(res=>{
+            console.log(res)
+            console.log(res.data)
+            if(res.data.error){
+                M.toast({html: res.data.error, classes: "#c62828 red darken-3"})
             }else{
-                localStorage.setItem("jwt",data.token)
-                localStorage.setItem("user",JSON.stringify(data.user))
-                // dispatch({type:"USER",payload:data.user})
-                M.toast({html:"signedin success",classes:"#43a047 green darken-1"})
-                history.push('/')
+                M.toast({html: "Logged in Successfully",  classes: "#00c853 green accent-4"})
+                history.push('/');
             }
         })
     }

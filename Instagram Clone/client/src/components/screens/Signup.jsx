@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
+import axios from 'axios';
 
 import M from 'materialize-css';
 
@@ -10,18 +11,17 @@ const Signup = ()=>{
     const [email, setEmail] = useState("");
 
     const PostData = ()=>{
-        fetch('http://localhost:5000/signup', {
-            method: "post",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({name, password, email})
+        axios.post('http://localhost:5000/signup', {
+            name, password, email
         })
-        .then(res=>res.json())
-        .then(data=> {
-            if(data.error){
-                M.toast({html: data.error, classes: "#c62828 red darken-3"})
+        .then(res=>{
+            console.log(res)
+            console.log(res.data)
+            if(res.data.error){
+                M.toast({html: res.data.error, classes: "#c62828 red darken-3"})
             }else{
-                M.toast({html: data.message, classes: "#00c853 green accent-4"})
-                history.push('/login')
+                M.toast({html: res.data.message, classes: "#00c853 green accent-4"})
+                history.push('/signin')
             }
         })
     }

@@ -48,40 +48,38 @@ router.post('/signup', (req, res, next)=>{
     })
 });
 
-router.post('/signin', (req, res, next)=>{
-    const { email, password } = req.body;
-    if(!email || !password ){
-        res.status(422).json({
-            error: 'Please add all fields'
-        })
+router.post('/signin',(req,res, next)=>{
+    const {email,password} = req.body
+    if(!email || !password){
+       return res.json({error:"Please fill all fields"})
     }
-    User.findOne({email: email})
+    User.findOne({email:email})
     .then(savedUser=>{
         if(!savedUser){
-            res.json({message: 'Invalid Email or Password'})
+           return res.json({error:"Invalid Email or password"})
         }
-        bcrypt.compare(password, savedUser.password)
+        bcrypt.compare(password,savedUser.password)
         .then(doMatch=>{
             if(doMatch){
-                // res.json({message: 'Successfully Signed in'})
-                const token = jwt.sign({
-                    _id: savedUser._id
-                }, secret)
-                const {_id, name, email} = savedUser;
-
-                res.json({ token, user: {_id, name, email}})
-
-            }else{
-                res.json({message: 'Invalid Email or Password'})
+                const {_id,name,email,followers,following,pic} = savedUser;
+                const token = jwt.sign({_id:savedUser._id},secret)
+                res.json({message:"successfully signed in", user: savedUser, token_id: token})
+                
+                // res.json({token,user:{_id,name,email,followers,following,pic}})
+            }
+            else{
+                return res.json({error:"Invalid Email or password"})
             }
         })
-        .catch(err=> console.log(err))
+        .catch(err=>{
+            console.log(err)
+        })
     })
 })
 
-router.post('/createpost', requireLogin, (req, res, next)=>{
-    const { title, body } = req.body;
-    if(!title || !body){
+router.post('/createpost', (req, res, next)=>{
+    const { title, body, pic } = req.body;
+    if(!title || !body || !pic){
         return res.status(422).json({error: 'Please Add all Fields'})
     }
 
@@ -92,7 +90,7 @@ router.post('/createpost', requireLogin, (req, res, next)=>{
     const post = new Post({
         title,
         body,
-        postedBy: req.user
+        pic 
     })
     post.save()
     .then(result =>{
